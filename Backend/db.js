@@ -19,7 +19,7 @@ connection.connect((err) => {
   console.log('Successfully connected to MySQL database');
 });
 
-// Create a route to fetch users
+// Create a route to fetch and display users
 app.get('/users', (req, res) => {
   connection.query('SELECT * FROM user', (error, results) => {
     if (error) {
@@ -27,14 +27,79 @@ app.get('/users', (req, res) => {
       res.status(500).send('Error fetching users');
       return;
     }
-    
-    console.log('Users from database:', results);
-    res.json(results);
+
+    // Generate HTML to display users with image and info
+    let html = `
+      <html>
+        <head>
+          <style>
+            .container {
+              display: flex;
+              align-items: center;
+              padding: 10px;
+              border: 1px solid #ddd;
+              border-radius: 8px;
+              max-width: 600px;
+              margin: 10px auto;
+              font-family: Arial, sans-serif;
+            }
+            .image-container {
+              flex: 0 0 80px;
+              margin-right: 20px;
+            }
+            .image {
+              width: 80px;
+              height: 80px;
+              border-radius: 50%;
+              object-fit: cover;
+            }
+            .info-container {
+              flex: 1;
+            }
+            .name {
+              font-size: 20px;
+              margin: 0 0 5px 0;
+            }
+            .email {
+              color: #555;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>User Profiles</h1>
+    `;
+
+    // Loop through each user and generate HTML content
+    results.forEach(user => {
+      let profilePicture = '';
+      if (user.Profile_Picture) {
+        profilePicture = Buffer.from(user.Profile_Picture).toString('base64');
+      }
+      html += `
+        <div class="container">
+          <div class="image-container">
+            <img src="data:image/png;base64,${profilePicture}" alt="Profile" class="image" />
+          </div>
+          <div class="info-container">
+            <h2 class="name">${user.Name}</h2>
+            <p class="email">${user.Email}</p>
+          </div>
+        </div>
+      `;
+    });
+
+    // Close the HTML body and send the response
+    html += `
+        </body>
+      </html>
+    `;
+
+    res.send(html);
   });
 });
 
 // Start server
-const PORT = 3000;
+const PORT = 3002;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
