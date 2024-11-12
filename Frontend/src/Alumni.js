@@ -4,6 +4,7 @@ import './Alumni.css';
 
 const Alumni = () => {
   const [alumni, setAlumni] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:5000/alumni')
@@ -12,11 +13,35 @@ const Alumni = () => {
       .catch(error => console.error('Error fetching alumni data:', error));
   }, []);
 
+  // Filter alumni based on search term
+  const filteredAlumni = alumni.filter(alum => {
+    const search = searchTerm.toLowerCase();
+    return (
+      alum.Name.toLowerCase().includes(search) ||
+      alum.Graduation_Year.toString().includes(search) ||
+      alum.Profession.toLowerCase().includes(search) ||
+      (alum.Academic_Details && alum.Academic_Details.toLowerCase().includes(search)) ||
+      (alum.Professional_Details && alum.Professional_Details.toLowerCase().includes(search))
+    );
+  });
+
   return (
     <div className="alumni-container">
-      <h1 className="alumni-title">PES ALUMNI</h1>
+      <div className="alumni-header">
+      <div className="alumni-title-container">
+          <img src="pesu.png" alt="PESU Logo" className="alumni-logo" />
+          <h1 className="alumni-title">PESU ALUMNI</h1>
+        </div>
+        <input
+          type="text"
+          placeholder="Search...."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="alumni-search"
+        />
+      </div>
       <div className="alumni-grid">
-        {alumni.map((alum) => (
+        {filteredAlumni.map((alum) => (
           <div key={alum.Alumni_ID} className="alumni-card">
             {alum.Profile_Picture && (
               <img

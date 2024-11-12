@@ -19,12 +19,14 @@ const Home = () => {
 };
 
 function App() {
+  const isLoggedIn = localStorage.getItem('userName') !== null;
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={localStorage.getItem('userName') ? <Home /> : <Navigate to="/login" />} />
+        <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/alumni" element={<Alumni />} />
+        <Route path="/alumni" element={isLoggedIn ? <Alumni /> : <Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
   );

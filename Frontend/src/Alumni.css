@@ -1,20 +1,19 @@
+.alumni-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.alumni-title-container {
+    display: flex;
+    align-items: center;
+}
+
 .alumni-title {
     font-size: 5em;
     font-weight: bold;
     color: #211c1c;
-    text-align: center;
-    margin: 0 auto 20px;
-    animation: heartbeat 1.5s infinite ease-in-out;
-}
-
-/* Heartbeat animation */
-@keyframes heartbeat {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
 }
 
 .alumni-container {
@@ -47,4 +46,23 @@
 .alumni-card h2 {
     margin-top: 10px;
     font-size: 1.5em;
+}
+
+.alumni-search {
+    padding: 8px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    width: 200px;
+}
+
+.alumni-search::placeholder {
+    color: #999;
+}
+
+.alumni-logo {
+    width: 120px; /* Adjust size as needed */
+    height: 140px;
+    margin-right: 15px; /* Space between logo and text */
 }

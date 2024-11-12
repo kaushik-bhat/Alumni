@@ -1,4 +1,4 @@
-// Frontend: src/Login.js
+// src/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -8,14 +8,26 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [userType, setUserType] = useState('');
   const navigate = useNavigate();
+
+  const handleUserTypeSelect = (type) => {
+    setUserType(type);
+    setError('');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!userType) {
+      setError('Please select Admin or Student');
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:5000/login', {
         email,
-        password
+        password,
+        userType,
       });
       
       if (response.data.success) {
@@ -28,48 +40,66 @@ const Login = () => {
   };
 
   return (
-    <div className="container">
-      <div className="login-box">
-        <h2 className="login-title">Alumni Login</h2>
-        
-        {error && (
-          <div className="error-message">
-            {error}
-          </div>
-        )}
+    <div className="main-container">
+      <header className="header">
+        <h1 className="header-title">Alumni Portal</h1>
+      </header>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">Email Address</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="form-input"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="form-input"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-
+      <div className="login-content">
+        <div className="button-group">
           <button
-            type="submit"
-            className="submit-button"
+            className={`user-type-button ${userType === 'admin' ? 'active' : ''}`}
+            onClick={() => handleUserTypeSelect('admin')}
           >
-            Login
+            Admin
           </button>
-        </form>
+          <button
+            className={`user-type-button ${userType === 'student' ? 'active' : ''}`}
+            onClick={() => handleUserTypeSelect('student')}
+          >
+            Student
+          </button>
+        </div>
+
+        <div className="login-box">
+          <h2 className="login-title">Sign In</h2>
+
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label className="form-label">Email Address</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="form-input"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="form-input"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <button type="submit" className="submit-button">
+              Login
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
