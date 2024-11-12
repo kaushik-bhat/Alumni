@@ -1,4 +1,3 @@
-// src/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +6,7 @@ import './login.css';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [id, setId] = useState('');  // New state for ID
   const [error, setError] = useState('');
   const [userType, setUserType] = useState('');
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ const Login = () => {
       const response = await axios.post('http://localhost:5000/login', {
         email,
         password,
+        id,       // Include ID in the request payload
         userType,
       });
       
@@ -35,7 +36,7 @@ const Login = () => {
         navigate('/');
       }
     } catch (err) {
-      setError('Invalid email or password');
+      setError(err.response?.data?.message || 'Invalid email or password');
     }
   };
 
@@ -62,8 +63,6 @@ const Login = () => {
         </div>
 
         <div className="login-box">
-          <h2 className="login-title">Sign In</h2>
-
           {error && (
             <div className="error-message">
               {error}
@@ -71,6 +70,18 @@ const Login = () => {
           )}
 
           <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label className="form-label">ID</label>
+              <input
+                type="text"
+                value={id}
+                onChange={(e) => setId(e.target.value)}
+                className="form-input"
+                placeholder="Enter your ID"
+                required
+              />
+            </div>
+
             <div className="form-group">
               <label className="form-label">Email Address</label>
               <input
