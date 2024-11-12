@@ -6,7 +6,7 @@ import './login.css';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [id, setId] = useState('');  // New state for ID
+  const [id, setId] = useState('');
   const [error, setError] = useState('');
   const [userType, setUserType] = useState('');
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userType) {
-      setError('Please select Admin or Student');
+      setError('Please select Admin, Student, or Alumni');
       return;
     }
 
@@ -27,14 +27,14 @@ const Login = () => {
       const response = await axios.post('http://localhost:5000/login', {
         email,
         password,
-        id,       // Include ID in the request payload
+        id,
         userType,
       });
-      
+
       if (response.data.success) {
         localStorage.setItem('userName', response.data.userData.Name);
-        localStorage.setItem('id', id);  // Save ID
-        localStorage.setItem('userType', userType);  // Save userType
+        localStorage.setItem('id', id);
+        localStorage.setItem('userType', userType);
         navigate('/');
       }
     } catch (err) {
@@ -61,6 +61,12 @@ const Login = () => {
             onClick={() => handleUserTypeSelect('student')}
           >
             Student
+          </button>
+          <button
+            className={`user-type-button ${userType === 'alumni' ? 'active' : ''}`}
+            onClick={() => handleUserTypeSelect('alumni')}
+          >
+            Alumni
           </button>
         </div>
 

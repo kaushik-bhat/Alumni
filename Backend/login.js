@@ -12,12 +12,15 @@ router.post('/login', (req, res) => {
     tableName = 'Admin';
   } else if (userType === 'student') {
     tableName = 'Student';
+  } else if (userType === 'alumni') {
+    tableName = 'Alumni';
   } else {
     return res.status(400).json({ success: false, message: 'Invalid user type' });
   }
 
   // Step 1: Verify the ID exists in the correct table and get the associated User_ID
-  const idQuery = `SELECT User_ID FROM ${tableName} WHERE ${userType === 'admin' ? 'Admin_ID' : 'Student_ID'} = ?`;
+  const idColumn = userType === 'admin' ? 'Admin_ID' : userType === 'student' ? 'Student_ID' : 'Alumni_ID';
+  const idQuery = `SELECT User_ID FROM ${tableName} WHERE ${idColumn} = ?`;
 
   db.query(idQuery, [id], (err, results) => {
     if (err) {
@@ -57,5 +60,7 @@ router.post('/login', (req, res) => {
     });
   });
 });
+
+
 
 module.exports = router;
