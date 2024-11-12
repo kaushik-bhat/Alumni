@@ -179,10 +179,10 @@ VALUES (12, 'admin2', 'admin2@example.com', 'password2');
 
 -- Insert the same users into the Admin table, referencing their User_ID
 INSERT INTO Admin (Admin_ID, Name, User_ID)
-VALUES (1, 'admin1', 1);
+VALUES (1, 'admin1', 11);
 
 INSERT INTO Admin (Admin_ID, Name, User_ID)
-VALUES (2, 'admin2', 2);
+VALUES (2, 'admin2', 12);
 
 
 COLLEGE ENTRY
