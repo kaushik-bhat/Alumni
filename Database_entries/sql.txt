@@ -206,3 +206,25 @@ VALUES
 (3, 'Rajesh Patel', 2023, 'ECE', 15),
 (4, 'Priya Verma', 2024, 'Mech', 16),
 (5, 'Ravi Reddy', 2022, 'EEE', 17);
+
+UPDATE User
+SET Profile_Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/raj.png')
+WHERE User_ID = 11;
+UPDATE User
+SET Profile_Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/raj.png')
+WHERE User_ID = 12;
+UPDATE User
+SET Profile_Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/raj.png')
+WHERE User_ID = 13;
+UPDATE User
+SET Profile_Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/sarah.png')
+WHERE User_ID = 14;
+UPDATE User
+SET Profile_Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/raj.png')
+WHERE User_ID = 15;
+UPDATE User
+SET Profile_Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/emma.png')
+WHERE User_ID = 16;
+UPDATE User
+SET Profile_Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/michael.png')
+WHERE User_ID = 17;
