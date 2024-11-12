@@ -188,3 +188,73 @@ VALUES (2, 'admin2', 2);
 COLLEGE ENTRY
 INSERT INTO College (College_ID, Name, Location)
 VALUES (1, 'PESU', 'RR campus Bangalore');
+
+
+INSERT INTO User (User_ID, Name, Email, Password, Profile_Picture, Academic_Details, Professional_Details)
+VALUES
+(13, 'Arun Kumar', 'arunkumar13@example.com', 'password13', NULL, 'PESU, Btech', NULL),
+(14, 'Aditi Sharma', 'aditsharma14@example.com', 'password14', NULL, 'PESU, Btech', NULL),
+(15, 'Rajesh Patel', 'rajeshpatel15@example.com', 'password15', NULL, 'PESU, Btech', NULL),
+(16, 'Priya Verma', 'priyaverma16@example.com', 'password16', NULL, 'PESU, Btech', NULL),
+(17, 'Ravi Reddy', 'ravireddy17@example.com', 'password17', NULL, 'PESU, Btech', NULL);
+
+-- Insert students into the Student table
+INSERT INTO Student (Student_ID, Name, Enrollment_Year, Course, User_ID)
+VALUES
+(1, 'Arun Kumar', 2022, 'CSE', 13),
+(2, 'Aditi Sharma', 2021, 'CSE', 14),
+(3, 'Rajesh Patel', 2023, 'ECE', 15),
+(4, 'Priya Verma', 2024, 'Mech', 16),
+(5, 'Ravi Reddy', 2022, 'EEE', 17);
+
+ALTER TABLE event
+ADD COLUMN Image BLOB;
+
+-- Insert dummy events
+INSERT INTO event (Event_ID, Name, Date, Time, Location, Description, College_ID, Admin_ID, Image)
+VALUES 
+(1, 'Annual Tech Summit 2024', '2024-12-15', '09:00:00', 
+   'Main Auditorium', 
+   'Join us for our annual technology summit featuring alumni from leading tech companies. Network with industry experts and learn about the latest trends in AI, blockchain, and cloud computing.',
+   1, 1, NULL),
+
+(2, 'Alumni Networking Mixer', '2024-11-25', '18:30:00', 
+   'Crystal Hall, Grand Hotel', 
+   'An evening of networking and connection. Meet fellow alumni from various industries, share experiences, and build valuable professional relationships.',
+   1, 2, NULL),
+
+(3, 'Career Guidance Workshop', '2024-10-30', '14:00:00', 
+   'Seminar Hall B', 
+   'Distinguished alumni will conduct sessions on career development, interview preparation, and industry insights. Perfect for recent graduates and those looking to switch careers.',
+   1, 2, NULL),
+
+(4, 'Entrepreneurship Bootcamp', '2024-11-10', '10:00:00', 
+   'Innovation Center', 
+   'A two-day intensive bootcamp led by successful alumni entrepreneurs. Learn about startup fundamentals, funding, and business strategy.',
+   1, 2, NULL),
+
+(5, 'Homecoming 2024', '2024-12-20', '11:00:00', 
+   'College Campus', 
+   'The biggest alumni gathering of the year! Join us for a day of celebration, memories, and reconnection with your alma mater. Includes campus tours, cultural performances, and gala dinner.',
+   1, 1, NULL);
+
+-- To add images to events (similar to user profile pictures)
+UPDATE event
+SET Image = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/techsummit.jpg')
+WHERE Event_ID = 1;
+
+UPDATE event
+SET Image = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/networking.jpg')
+WHERE Event_ID = 2;
+
+UPDATE event
+SET Image = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/workshop.jpg')
+WHERE Event_ID = 3;
+
+UPDATE event
+SET Image = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/bootcamp.jpg')
+WHERE Event_ID = 4;
+
+UPDATE event
+SET Image = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/homecoming.jpg')
+WHERE Event_ID = 5;
