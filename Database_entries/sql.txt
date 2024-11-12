@@ -188,3 +188,21 @@ VALUES (2, 'admin2', 2);
 COLLEGE ENTRY
 INSERT INTO College (College_ID, Name, Location)
 VALUES (1, 'PESU', 'RR campus Bangalore');
+
+
+INSERT INTO User (User_ID, Name, Email, Password, Profile_Picture, Academic_Details, Professional_Details)
+VALUES
+(13, 'Arun Kumar', 'arunkumar13@example.com', 'password13', NULL, 'PESU, Btech', NULL),
+(14, 'Aditi Sharma', 'aditsharma14@example.com', 'password14', NULL, 'PESU, Btech', NULL),
+(15, 'Rajesh Patel', 'rajeshpatel15@example.com', 'password15', NULL, 'PESU, Btech', NULL),
+(16, 'Priya Verma', 'priyaverma16@example.com', 'password16', NULL, 'PESU, Btech', NULL),
+(17, 'Ravi Reddy', 'ravireddy17@example.com', 'password17', NULL, 'PESU, Btech', NULL);
+
+-- Insert students into the Student table
+INSERT INTO Student (Student_ID, Name, Enrollment_Year, Course, User_ID)
+VALUES
+(1, 'Arun Kumar', 2022, 'CSE', 13),
+(2, 'Aditi Sharma', 2021, 'CSE', 14),
+(3, 'Rajesh Patel', 2023, 'ECE', 15),
+(4, 'Priya Verma', 2024, 'Mech', 16),
+(5, 'Ravi Reddy', 2022, 'EEE', 17);
