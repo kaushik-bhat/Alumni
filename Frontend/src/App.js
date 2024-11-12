@@ -3,7 +3,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Login from './Login';
 import Alumni from './Alumni';
-import Homepage from './Homepage';
 import './App.css';
 
 const Home = () => {
@@ -28,7 +27,6 @@ function App() {
         <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/alumni" element={isLoggedIn ? <Alumni /> : <Navigate to="/login" />} />
-        <Route path="/homepage" element={<Homepage />} />
       </Routes>
     </BrowserRouter>
   );
