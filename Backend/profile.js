@@ -12,12 +12,14 @@ router.get('/profile/:id/:userType', (req, res) => {
     tableName = 'Admin';
   } else if (userType === 'student') {
     tableName = 'Student';
+  } else if (userType === 'alumni') {
+    tableName = 'Alumni';
   } else {
     return res.status(400).json({ success: false, message: 'Invalid user type' });
   }
 
   // Step 1: Get the User_ID based on ID in either Admin or Student table
-  const idQuery = `SELECT User_ID FROM ${tableName} WHERE ${userType === 'admin' ? 'Admin_ID' : 'Student_ID'} = ?`;
+  const idQuery = `SELECT User_ID FROM ${tableName} WHERE ${userType === 'admin' ? 'Admin_ID' : userType === 'student' ? 'Student_ID' : 'Alumni_ID'} = ?`;
 
   db.query(idQuery, [id], (err, results) => {
     if (err) {
