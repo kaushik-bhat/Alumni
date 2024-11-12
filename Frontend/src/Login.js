@@ -33,6 +33,8 @@ const Login = () => {
       
       if (response.data.success) {
         localStorage.setItem('userName', response.data.userData.Name);
+        localStorage.setItem('id', id);  // Save ID
+        localStorage.setItem('userType', userType);  // Save userType
         navigate('/');
       }
     } catch (err) {
