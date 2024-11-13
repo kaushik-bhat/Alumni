@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import Login from './Login';
 import Alumni from './Alumni';
 import Profile from './Profile'; // Import the new Profile component
+import Events from './Events';
 import './App.css';
 
 const Home = () => {
@@ -30,6 +31,7 @@ const Navbar = () => {
     <nav className="navbar">
       <button onClick={() => navigate('/')} className="nav-button">Home</button>
       <button onClick={() => navigate('/profile')} className="nav-button">Profile</button>
+      <button onClick={() => navigate('/events')} className="nav-button">Events</button>
       <button onClick={handleLogout} className="nav-button">Logout</button>
     </nav>
   );
@@ -46,6 +48,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/alumni" element={isLoggedIn ? <Alumni /> : <Navigate to="/login" />} />
         <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/login" />} />
+        <Route path="/events" element={isLoggedIn ? <Events /> : <Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
   );

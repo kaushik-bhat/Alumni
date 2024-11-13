@@ -5,6 +5,7 @@ const db = require('./db');  // Import the shared db connection
 const alumniRoutes = require('./alumni');  // Alumni route file
 const loginRoutes = require('./login');    // Login route file
 const profileRoutes = require('./profile'); // Import the profile route file
+const eventRoutes = require('./event'); //import the event route file
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(alumniRoutes);  // Use the alumni route
 app.use(loginRoutes);   // Use the login route  
 app.use(profileRoutes); // Use the profile route
+app.use(eventRoutes); // use the event route
 
 const PORT = 5000;
 app.listen(PORT, () => {
