@@ -1,0 +1,32 @@
+/* src/Admin.css */
+
+.admin-page {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .admin-page h2 {
+    color: #2b6cb0;
+  }
+  
+  .admin-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .admin-button {
+    padding: 10px 20px;
+    background-color: #2b6cb0;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .admin-button:hover {
+    background-color: #1e4f8a;
+  }
+  

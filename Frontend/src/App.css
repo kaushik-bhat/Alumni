@@ -16,22 +16,108 @@ body {
   font-weight: bold;
 }
 
+/* Navbar Styles */
 .navbar {
   display: flex;
   justify-content: space-around;
   background-color: #2b6cb0;
   padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  transition: background-color 0.3s ease-in-out; /* Smooth transition for background color */
+}
+
+.navbar:hover {
+  background-color: #245a92; /* Darkens the navbar slightly on hover */
 }
 
 .nav-button {
-  background-color: #f7fafc;
+  background-color: transparent; /* Make buttons transparent to blend with navbar */
   border: none;
-  color: #333;
+  color: #f7fafc;
   padding: 10px 20px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: bold;
+  transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease; /* Smooth hover and color transitions */
+  border-radius: 5px; /* Adds rounded corners to buttons */
 }
 
 .nav-button:hover {
-  background-color: #ddd;
+  background-color: #1e4f8a; /* Slightly darker shade for hover effect */
+  color: #ffffff; /* Ensures text remains visible */
+  transform: translateY(-2px); /* Adds a slight "lift" effect on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Adds a shadow on hover for a 3D effect */
+}
+
+.nav-button:active {
+  transform: translateY(1px); /* Button slightly "presses down" when clicked */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Adjust shadow for pressed state */
+}
+
+
+
+
+/* Landing Page Styles */
+.landing {
+  height: 100vh;
+  background-image: url('https://images.shiksha.com/mediadata/images/articles/1589976996phpBuHIqI.jpeg');
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.landing-content {
+  max-width: 600px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+}
+
+.landing-title {
+  font-size: 36px;
+  color: #2b6cb0;
+  margin-bottom: 10px;
+  animation: fadeIn 1.5s ease-in;
+}
+
+.join-button {
+  background-color: #2b6cb0;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 1em;
+  transition: background-color 0.3s ease;
+}
+.admin-button {
+  color: #ffeb3b; /* Different color to stand out */
+}
+
+.join-button:hover {
+  background-color: #1e4f8a;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
