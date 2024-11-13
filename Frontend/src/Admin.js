@@ -5,8 +5,9 @@ import styles from './Admin.module.css';  // Import the CSS module
 const Admin = () => {
   const [tableNames, setTableNames] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
-  const [selectedAction, setSelectedAction] = useState(null);  // State for selected action
-  const [tableStructure, setTableStructure] = useState(null);  // State for table structure
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [tableStructure, setTableStructure] = useState(null);
+  const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
 
   // Fetch table names from the backend on component mount
@@ -14,10 +15,8 @@ const Admin = () => {
     const fetchTableNames = async () => {
       try {
         const response = await axios.get('http://localhost:5000/admin/tables');
-        
-        // Filter out the 'connection' table
         const filteredTableNames = response.data.filter(table => table !== 'connection' && table !== 'admin');
-        setTableNames(filteredTableNames);  // Set the filtered table names
+        setTableNames(filteredTableNames);
       } catch (err) {
         setError('Failed to fetch table names. Please try again later.');
         console.error('Error fetching table names:', err);
@@ -33,7 +32,7 @@ const Admin = () => {
       if (selectedTable) {
         try {
           const response = await axios.get(`http://localhost:5000/admin/table-structure/${selectedTable}`);
-          setTableStructure(response.data);  // Set the fetched table structure
+          setTableStructure(response.data);
         } catch (err) {
           console.error('Error fetching table structure:', err);
           setError('Failed to fetch table structure');
@@ -44,18 +43,30 @@ const Admin = () => {
     fetchTableStructure();
   }, [selectedTable]);
 
+  // Handle table selection
   const handleTableClick = (table) => {
-    // If the clicked table is already selected, unselect it
     if (selectedTable === table) {
       setSelectedTable(null);
-      setTableStructure(null); // Reset table structure when unselected
+      setTableStructure(null);
     } else {
       setSelectedTable(table);
     }
   };
 
+  const ErrorModal = ({ message, onClose }) => {
+    return (
+      <div className={styles.modalOverlay}>
+        <div className={styles.modalContent}>
+          <h2>Error</h2>
+          <p>{message}</p>
+          <button onClick={onClose} className={styles.closeButton}>Close</button>
+        </div>
+      </div>
+    );
+  };
+
+  // Handle action selection
   const handleActionClick = (action) => {
-    // If the clicked action is already selected, unselect it
     if (selectedAction === action) {
       setSelectedAction(null);
     } else {
@@ -63,10 +74,37 @@ const Admin = () => {
     }
   };
 
+  // Handle form input changes
+  const handleInputChange = (column, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [column]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formFields = tableStructure.map(col => ({
+      column: col.column,
+      value: formData[col.column] || null, // If value is empty, set it to null
+    }));
+
+    try {
+      await axios.post(`http://localhost:5000/admin/insert/${selectedTable}`, formFields);
+      alert('Data inserted successfully!');
+      setFormData({});
+    } catch (err) {
+        console.error('Error inserting data:', err);
+        setError(err.response?.data?.message || 'Failed to insert data'); // Display error message from backend
+    }
+  };
+
   return (
     <div className={styles.adminContainer}>
       <h1 className={styles.title}>Admin Dashboard</h1>
-      {error && <p className={styles.error}>{error}</p>}
+      {error && <ErrorModal message={error} onClose={() => setError(null)} />}
 
       <div className={styles.mainContent}>
         <div className={styles.tablesContainer}>
@@ -111,7 +149,7 @@ const Admin = () => {
         </div>
       </div>
 
-      {/* Display Table Structure if a table is selected */}
+      {/* Table Structure */}
       {selectedTable && tableStructure && (
         <div className={styles.tableStructureBox}>
           <h2 className={styles.databaseHeading}>Table Structure: {selectedTable}</h2>
@@ -126,6 +164,29 @@ const Admin = () => {
               <p>No columns found</p>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Insert Form */}
+      {selectedAction === 'Insert' && selectedTable && tableStructure && (
+        <div className={styles.tableStructureBox}>
+          <h2 className={styles.databaseHeading}>Insert Data into {selectedTable}</h2>
+          <form onSubmit={handleSubmit}>
+            {tableStructure.map((col, index) => (
+              <div key={index} className={styles.formGroup}>
+                <label htmlFor={col.column}>{col.column}</label>
+                <input
+                  type="text"
+                  id={col.column}
+                  name={col.column}
+                  value={formData[col.column] || ''}
+                  onChange={(e) => handleInputChange(col.column, e.target.value)}
+                  required={col.dataType.toLowerCase().includes('not null')}
+                />
+              </div>
+            ))}
+            <button type="submit" className={styles.actionButton}>Submit</button>
+          </form>
         </div>
       )}
     </div>
