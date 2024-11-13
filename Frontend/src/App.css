@@ -9,6 +9,13 @@ body {
 
 .home-container {
   padding: 32px;
+  background-image: url('https://images.shiksha.com/mediadata/images/articles/1589976996phpBuHIqI.jpeg');
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
 }
 
 .home-title {

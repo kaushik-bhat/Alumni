@@ -5,6 +5,7 @@ import Login from './Login';
 import Alumni from './Alumni';
 import Profile from './Profile'; // Import the new Profile component
 import Events from './Events';
+import AdminPage from './Admin';
 import './App.css';
 
 const Home = () => {
@@ -27,11 +28,21 @@ const Navbar = () => {
     navigate('/login');
   };
 
+  const handleAdminPage = () => {
+    const userType = localStorage.getItem('userType');
+    if (userType === 'admin') {
+      navigate('/admin'); // Redirect to admin page if the user is an admin
+    } else {
+      alert('No access only Admins can acces this seciton'); // Show "No access" message for non-admin users
+    }
+  };
+
   return (
     <nav className="navbar">
       <button onClick={() => navigate('/')} className="nav-button">Home</button>
       <button onClick={() => navigate('/profile')} className="nav-button">Profile</button>
       <button onClick={() => navigate('/events')} className="nav-button">Events</button>
+      <button onClick={handleAdminPage} className="nav-button admin-button">Admin</button>
       <button onClick={handleLogout} className="nav-button">Logout</button>
     </nav>
   );
@@ -49,6 +60,7 @@ function App() {
         <Route path="/alumni" element={isLoggedIn ? <Alumni /> : <Navigate to="/login" />} />
         <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/login" />} />
         <Route path="/events" element={isLoggedIn ? <Events /> : <Navigate to="/login" />} />
+        <Route path="/admin" element={isLoggedIn && localStorage.getItem('userType') === 'admin' ? <AdminPage /> : <Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   );
