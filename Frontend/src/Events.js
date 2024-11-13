@@ -8,12 +8,12 @@ const Events = () => {
 
   useEffect(() => {
     fetch('http://localhost:5000/events')
-      .then((response) => response.json())
-      .then((data) => setEvents(data))
-      .catch((error) => console.error('Error fetching events data:', error));
+      .then(response => response.json())
+      .then(data => setEvents(data))
+      .catch(error => console.error('Error fetching events data:', error));
   }, []);
 
-  const filteredEvents = events.filter((event) => {
+  const filteredEvents = events.filter(event => {
     const search = searchTerm.toLowerCase();
     return (
       event.Name.toLowerCase().includes(search) ||
@@ -39,8 +39,15 @@ const Events = () => {
         />
       </div>
       <div className="events-grid">
-        {filteredEvents.map((event) => (
+        {filteredEvents.map(event => (
           <div key={event.Event_ID} className="events-card">
+            {event.Picture && (
+              <img
+                src={`data:image/jpeg;base64,${event.Picture}`}
+                alt={`${event.Name}`}
+                className="event-image"
+              />
+            )}
             <div className="events-card-content">
               <h2>{event.Name}</h2>
               <p><strong>Date:</strong> {new Date(event.Date).toLocaleDateString()}</p>

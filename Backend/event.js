@@ -1,12 +1,12 @@
 // event.js
 const express = require('express');
-const db = require('./db');  // Import the shared db connection
+const db = require('./db'); // Import the shared db connection
 const router = express.Router();
 
 router.get('/events', (req, res) => {
   const query = `
     SELECT 
-      Event_ID, Name, Date, Time, Location, Description 
+      Event_ID, Name, Date, Time, Location, Description, Picture 
     FROM Event;
   `;
 
@@ -23,6 +23,7 @@ router.get('/events', (req, res) => {
       Time: row.Time,
       Location: row.Location,
       Description: row.Description,
+      Picture: row.Picture ? Buffer.from(row.Picture).toString('base64') : null,
     }));
 
     res.json(events);
