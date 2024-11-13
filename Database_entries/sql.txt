@@ -235,3 +235,26 @@ INSERT INTO Event (Event_ID, Name, Date, Time, Location, Description, College_ID
 (3, 'Startup Workshop', '2025-01-10', '11:00:00', 'Conference Room B', 'A hands-on workshop on how to launch a successful startup in India.', 1, 1),
 (4, 'Cultural Fest: Retro Night', '2025-02-05', '18:00:00', 'Outdoor Grounds', 'A nostalgic evening for alumni to reconnect and enjoy cultural performances.', 1, 1),
 (5, 'Career Networking Night', '2024-12-20', '17:00:00', 'Banquet Hall', 'Networking event for students and alumni to build professional connections.', 1, 1);
+
+ALTER TABLE Event
+ADD COLUMN Picture BLOB;
+
+UPDATE Event
+SET Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/event1.png')
+WHERE Event_ID = 1;
+
+UPDATE Event
+SET Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/event2.png')
+WHERE Event_ID = 2;
+
+UPDATE Event
+SET Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/event3.png')
+WHERE Event_ID = 3;
+
+UPDATE Event
+SET Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/event4.png')
+WHERE Event_ID = 4;
+
+UPDATE Event
+SET Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/event5.png')
+WHERE Event_ID = 5;
