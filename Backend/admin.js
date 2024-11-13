@@ -17,4 +17,24 @@ router.get('/tables', (req, res) => {
   });
 });
 
+router.get('/table-structure/:tableName', (req, res) => {
+    const tableName = req.params.tableName;
+  
+    // Query to show the structure of the table (DESCRIBE command)
+    db.query(`DESCRIBE ${tableName}`, (err, result) => {
+      if (err) {
+        console.error('Error fetching table structure:', err);
+        return res.status(500).json({ error: 'Failed to fetch table structure' });
+      }
+  
+      // Format the result to get columns and their data types
+      const structure = result.map(row => ({
+        column: row.Field,
+        dataType: row.Type
+      }));
+  
+      res.json(structure);  // Send table structure as a JSON response
+    });
+  });
+
 module.exports = router;

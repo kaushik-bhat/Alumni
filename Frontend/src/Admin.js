@@ -6,6 +6,7 @@ const Admin = () => {
   const [tableNames, setTableNames] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
   const [selectedAction, setSelectedAction] = useState(null);  // State for selected action
+  const [tableStructure, setTableStructure] = useState(null);  // State for table structure
   const [error, setError] = useState(null);
 
   // Fetch table names from the backend on component mount
@@ -26,12 +27,40 @@ const Admin = () => {
     fetchTableNames();
   }, []);
 
+  // Fetch table structure when a table is selected
+  useEffect(() => {
+    const fetchTableStructure = async () => {
+      if (selectedTable) {
+        try {
+          const response = await axios.get(`http://localhost:5000/admin/table-structure/${selectedTable}`);
+          setTableStructure(response.data);  // Set the fetched table structure
+        } catch (err) {
+          console.error('Error fetching table structure:', err);
+          setError('Failed to fetch table structure');
+        }
+      }
+    };
+
+    fetchTableStructure();
+  }, [selectedTable]);
+
   const handleTableClick = (table) => {
-    setSelectedTable(table);
+    // If the clicked table is already selected, unselect it
+    if (selectedTable === table) {
+      setSelectedTable(null);
+      setTableStructure(null); // Reset table structure when unselected
+    } else {
+      setSelectedTable(table);
+    }
   };
 
   const handleActionClick = (action) => {
-    setSelectedAction(action);
+    // If the clicked action is already selected, unselect it
+    if (selectedAction === action) {
+      setSelectedAction(null);
+    } else {
+      setSelectedAction(action);
+    }
   };
 
   return (
@@ -81,6 +110,24 @@ const Admin = () => {
           </button>
         </div>
       </div>
+
+      {/* Display Table Structure if a table is selected */}
+      {selectedTable && tableStructure && (
+        <div className={styles.tableStructureBox}>
+          <h2 className={styles.databaseHeading}>Table Structure: {selectedTable}</h2>
+          <div className={styles.structureList}>
+            {tableStructure.length > 0 ? (
+              tableStructure.map((col, index) => (
+                <div key={index} className={styles.columnInfo}>
+                  <strong>{col.column}</strong>: {col.dataType}
+                </div>
+              ))
+            ) : (
+              <p>No columns found</p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

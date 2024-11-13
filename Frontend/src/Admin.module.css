@@ -125,3 +125,27 @@
   color: #fff;  /* Ensure text stays readable */
   transform: scale(1.05);
 }
+
+.tableStructureBox {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 40px;  /* Space between actions and table structure */
+}
+
+.structureList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.columnInfo {
+  font-size: 1.1rem;
+  color: #555;
+  padding: 10px;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
