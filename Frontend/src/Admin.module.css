@@ -209,3 +209,11 @@
 .closeButton:hover {
   background-color: #c0392b;
 }
+
+.successModal {
+  border: 2px solid #2ecc71;
+}
+
+.errorModal {
+  border: 2px solid #e74c3c;
+}

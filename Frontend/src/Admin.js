@@ -11,6 +11,7 @@ const Admin = () => {
   const [formData, setFormData] = useState({});
   const [editData, setEditData] = useState({});
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   // Fetch table names from the backend on component mount
   useEffect(() => {
@@ -72,7 +73,7 @@ const handleEditSubmit = async (e) => {
 
   try {
     await axios.post(`http://localhost:5000/admin/update/${selectedTable}`, formFields);
-    alert('Data updated successfully!');
+    setSuccessMessage('Data updated successfully!');
     setEditData({});
   } catch (err) {
     console.error('Error updating data:', err);
@@ -90,11 +91,11 @@ const handleEditSubmit = async (e) => {
     }
   };
 
-  const ErrorModal = ({ message, onClose }) => {
+  const MessageModal = ({ message, type, onClose }) => {
     return (
       <div className={styles.modalOverlay}>
-        <div className={styles.modalContent}>
-          <h2>Error</h2>
+        <div className={`${styles.modalContent} ${type === 'success' ? styles.successModal : styles.errorModal}`}>
+          <h2>{type === 'success' ? 'Success' : 'Error'}</h2>
           <p>{message}</p>
           <button onClick={onClose} className={styles.closeButton}>Close</button>
         </div>
@@ -141,7 +142,7 @@ const handleEditSubmit = async (e) => {
         primaryKey,
         primaryKeyValue: deleteKeyValue
       });
-      alert('Row deleted successfully!');
+      setSuccessMessage('Row deleted successfully!');
       setDeleteKeyValue(''); // Clear the input after deletion
     } catch (err) {
       console.error('Error deleting data:', err);
@@ -160,7 +161,7 @@ const handleEditSubmit = async (e) => {
 
     try {
       await axios.post(`http://localhost:5000/admin/insert/${selectedTable}`, formFields);
-      alert('Data inserted successfully!');
+      setSuccessMessage('Data inserted successfully!');
       setFormData({});
     } catch (err) {
         console.error('Error inserting data:', err);
@@ -171,7 +172,8 @@ const handleEditSubmit = async (e) => {
   return (
     <div className={styles.adminContainer}>
       <h1 className={styles.title}>Admin Dashboard</h1>
-      {error && <ErrorModal message={error} onClose={() => setError(null)} />}
+      {error && <MessageModal message={error} type="error" onClose={() => setError(null)} />}
+{successMessage && <MessageModal message={successMessage} type="success" onClose={() => setSuccessMessage(null)} />}
 
       <div className={styles.mainContent}>
         <div className={styles.tablesContainer}>
