@@ -77,6 +77,24 @@ router.get('/table-structure/:tableName', (req, res) => {
       .filter(field => field.value !== '' && field.column !== primaryKey)
       .map(field => `${field.column} = '${field.value}'`)
       .join(', ');
+
+      if (!updates) {
+        return res.status(400).json({ message: 'No fields to update' });
+      }
+
+      const checkQuery = `SELECT * FROM ${tableName} WHERE ${primaryKey} = '${primaryKeyValue}' LIMIT 1`;
+
+      db.query(checkQuery, (err, result) => {
+        if (err) {
+          console.error('Error checking data existence:', err);
+          return res.status(400).json({ message: 'Failed to check data existence' });
+        }
+    
+        // If no rows were found, send an error response
+        if (result.length === 0) {
+          return res.status(404).json({ message: 'Entry does not exist in the selected table' });
+        }
+      });
   
     const query = `UPDATE ${tableName} SET ${updates} WHERE ${primaryKey} = '${primaryKeyValue}'`;
   
@@ -89,5 +107,41 @@ router.get('/table-structure/:tableName', (req, res) => {
       res.status(200).json({ message: 'Data updated successfully' });
     });
   });
+
+  router.post('/delete/:tableName', (req, res) => {
+    const tableName = req.params.tableName;
+    const { primaryKey, primaryKeyValue } = req.body;
+  
+    if (!primaryKeyValue) {
+      return res.status(400).json({ message: 'Primary key value is required for deletion.' });
+    }
+  
+    // First, check if the row exists
+    const checkQuery = `SELECT * FROM ${tableName} WHERE ${primaryKey} = '${primaryKeyValue}' LIMIT 1`;
+  
+    db.query(checkQuery, (err, result) => {
+      if (err) {
+        console.error('Error checking data existence:', err);
+        return res.status(400).json({ message: 'Failed to check data existence' });
+      }
+  
+      // If no rows were found, send an error response
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'Entry does not exist in the selected table' });
+      }
+  
+      // If the row exists, proceed with deletion
+      const deleteQuery = `DELETE FROM ${tableName} WHERE ${primaryKey} = '${primaryKeyValue}'`;
+      db.query(deleteQuery, (err, result) => {
+        if (err) {
+          console.error('Error deleting data:', err);
+          return res.status(400).json({ message: err.sqlMessage || 'Failed to delete data' });
+        }
+        res.status(200).json({ message: 'Data deleted successfully' });
+      });
+    });
+  });
+
+
 
 module.exports = router;

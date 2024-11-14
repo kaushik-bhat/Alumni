@@ -7,6 +7,7 @@ const Admin = () => {
   const [selectedTable, setSelectedTable] = useState(null);
   const [selectedAction, setSelectedAction] = useState(null);
   const [tableStructure, setTableStructure] = useState(null);
+  const [deleteKeyValue, setDeleteKeyValue] = useState('');
   const [formData, setFormData] = useState({});
   const [editData, setEditData] = useState({});
   const [error, setError] = useState(null);
@@ -123,6 +124,29 @@ const handleEditSubmit = async (e) => {
       ...prevData,
       [column]: value,
     }));
+  };
+
+  const handleDeleteInputChange = (value) => {
+    setDeleteKeyValue(value);
+  };
+
+  const handleDeleteSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Get the primary key column name (assumed to be the first column)
+    const primaryKey = tableStructure[0].column;
+  
+    try {
+      await axios.post(`http://localhost:5000/admin/delete/${selectedTable}`, {
+        primaryKey,
+        primaryKeyValue: deleteKeyValue
+      });
+      alert('Row deleted successfully!');
+      setDeleteKeyValue(''); // Clear the input after deletion
+    } catch (err) {
+      console.error('Error deleting data:', err);
+      setError(err.response?.data?.message || 'Failed to delete data');
+    }
   };
 
   // Handle form submission
@@ -250,6 +274,25 @@ const handleEditSubmit = async (e) => {
         </div>
       ))}
       <button type="submit" className={styles.actionButton}>Submit</button>
+    </form>
+  </div>
+)}
+{selectedAction === 'Delete' && selectedTable && tableStructure && (
+  <div className={styles.tableStructureBox}>
+    <h2 className={styles.databaseHeading}>Delete Row from {selectedTable}</h2>
+    <form onSubmit={handleDeleteSubmit}>
+      <div className={styles.formGroup}>
+        <label htmlFor="primaryKeyValue">{tableStructure[0].column} (Primary Key)</label>
+        <input
+          type="text"
+          id="primaryKeyValue"
+          name="primaryKeyValue"
+          value={deleteKeyValue}
+          onChange={(e) => handleDeleteInputChange(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit" className={styles.actionButton}>Delete</button>
     </form>
   </div>
 )}
