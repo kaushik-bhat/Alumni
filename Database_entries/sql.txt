@@ -258,3 +258,6 @@ WHERE Event_ID = 4;
 UPDATE Event
 SET Picture = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/event5.png')
 WHERE Event_ID = 5;
+
+ALTER TABLE fund
+RENAME COLUMN Contributors to Contributor_ID;
