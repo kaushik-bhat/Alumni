@@ -8,6 +8,7 @@ const Admin = () => {
   const [selectedAction, setSelectedAction] = useState(null);
   const [tableStructure, setTableStructure] = useState(null);
   const [formData, setFormData] = useState({});
+  const [editData, setEditData] = useState({});
   const [error, setError] = useState(null);
 
   // Fetch table names from the backend on component mount
@@ -43,6 +44,41 @@ const Admin = () => {
     fetchTableStructure();
   }, [selectedTable]);
 
+  // Handle data loading for edit action
+useEffect(() => {
+  const fetchEditData = async () => {
+    if (selectedAction === 'Edit' && selectedTable) {
+      try {
+        const response = await axios.get(`http://localhost:5000/admin/table-structure/${selectedTable}`);
+        setEditData(response.data.reduce((acc, col) => ({ ...acc, [col.column]: '' }), {}));
+      } catch (err) {
+        console.error('Error fetching data for edit:', err);
+        setError('Failed to fetch data for edit');
+      }
+    }
+  };
+
+  fetchEditData();
+}, [selectedTable, selectedAction]);
+
+const handleEditSubmit = async (e) => {
+  e.preventDefault();
+
+  const formFields = tableStructure.map((col) => ({
+    column: col.column,
+    value: editData[col.column] || '', // Use editData values
+  }));
+
+  try {
+    await axios.post(`http://localhost:5000/admin/update/${selectedTable}`, formFields);
+    alert('Data updated successfully!');
+    setEditData({});
+  } catch (err) {
+    console.error('Error updating data:', err);
+    setError(err.response?.data?.message || 'Failed to update data');
+  }
+};
+
   // Handle table selection
   const handleTableClick = (table) => {
     if (selectedTable === table) {
@@ -77,6 +113,13 @@ const Admin = () => {
   // Handle form input changes
   const handleInputChange = (column, value) => {
     setFormData((prevData) => ({
+      ...prevData,
+      [column]: value,
+    }));
+  };
+
+  const handleEditInputChange = (column, value) => {
+    setEditData((prevData) => ({
       ...prevData,
       [column]: value,
     }));
@@ -189,6 +232,27 @@ const Admin = () => {
           </form>
         </div>
       )}
+      {selectedAction === 'Edit' && selectedTable && tableStructure && (
+  <div className={styles.tableStructureBox}>
+    <h2 className={styles.databaseHeading}>Edit Data in {selectedTable}</h2>
+    <form onSubmit={handleEditSubmit}>
+      {tableStructure.map((col, index) => (
+        <div key={index} className={styles.formGroup}>
+          <label htmlFor={col.column}>{col.column}</label>
+          <input
+            type="text"
+            id={col.column}
+            name={col.column}
+            value={editData[col.column] || ''}
+            onChange={(e) => handleEditInputChange(col.column, e.target.value)}
+            required={index === 0} // Assume the first column is the primary key
+          />
+        </div>
+      ))}
+      <button type="submit" className={styles.actionButton}>Submit</button>
+    </form>
+  </div>
+)}
     </div>
   );
 };

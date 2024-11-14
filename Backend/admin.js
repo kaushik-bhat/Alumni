@@ -60,4 +60,34 @@ router.get('/table-structure/:tableName', (req, res) => {
     });
   });
 
+  router.post('/update/:tableName', async (req, res) => {
+    const tableName = req.params.tableName;
+    const formData = req.body;
+  
+    // Check for primary key in the data (assumed to be the first column)
+    const primaryKey = formData[0].column;
+    const primaryKeyValue = formData[0].value;
+  
+    if (!primaryKeyValue) {
+      return res.status(400).json({ message: `Primary key (${primaryKey}) cannot be empty for update.` });
+    }
+  
+    // Prepare the update query by excluding fields with empty values
+    const updates = formData
+      .filter(field => field.value !== '' && field.column !== primaryKey)
+      .map(field => `${field.column} = '${field.value}'`)
+      .join(', ');
+  
+    const query = `UPDATE ${tableName} SET ${updates} WHERE ${primaryKey} = '${primaryKeyValue}'`;
+  
+    // Execute the update query
+    db.query(query, (err, result) => {
+      if (err) {
+        console.error('Error updating data:', err);
+        return res.status(400).json({ message: err.sqlMessage || 'Failed to update data' });
+      }
+      res.status(200).json({ message: 'Data updated successfully' });
+    });
+  });
+
 module.exports = router;
