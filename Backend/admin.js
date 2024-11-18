@@ -142,6 +142,25 @@ router.get('/table-structure/:tableName', (req, res) => {
     });
   });
 
+  // Route to fetch the total funds
+  router.get('/total-funds', (req, res) => {
+    db.query('CALL GetTotalFunds(@totalFunds)', (err, result1) => {
+      if (err) {
+        console.error("Error calling procedure:", err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+  
+      db.query('SELECT @totalFunds AS totalFunds', (err, result2) => {
+        if (err) {
+          console.error("Error fetching total funds:", err);
+          return res.status(500).json({ error: 'Database error' });
+        }
+  
+        res.json({ totalFunds: result2[0]?.totalFunds });
+      });
+    });
+  });
+
 
 
 module.exports = router;

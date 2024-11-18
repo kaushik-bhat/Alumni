@@ -169,6 +169,16 @@ const handleEditSubmit = async (e) => {
     }
   };
 
+  const handleTotalFundsClick = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/admin/total-funds');
+      setSuccessMessage(`Total Funds: ${response.data.totalFunds}`); // Display the total funds
+    } catch (err) {
+      console.error('Error fetching total funds:', err);
+      setError('Failed to fetch total funds.');
+    }
+  };
+
   return (
     <div className={styles.adminContainer}>
       <h1 className={styles.title}>Admin Dashboard</h1>
@@ -214,6 +224,12 @@ const handleEditSubmit = async (e) => {
             onClick={() => handleActionClick('Delete')}
           >
             Delete
+          </button>
+          <button
+            className={`${styles.actionButton}`}
+            onClick={handleTotalFundsClick}
+          >
+            Total Funds
           </button>
         </div>
       </div>
